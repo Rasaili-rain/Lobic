@@ -18,8 +18,8 @@ Lobic is an interactive music streaming application designed to transform how pe
 ## Setup Instructions
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/lobic.git
-   cd lobic
+   git clone https://github.com/Rasaili-rain/Lobic.git
+   cd Lobic
    ```
 2. Backend Setup:
    ```bash
@@ -76,6 +76,3 @@ This project is done as a semester project by the following members:
 This is a cleaned-up fork. Find the original codebases and commits in the respective repositories:
 - Frontend: [Frontend Original Repository](https://github.com/fy-st0rm/Lobic)
 - Backend: [Backend Original Repository](https://github.com/Rasaili-rain/Lobic-backend)
-
-### License
-	MIT
