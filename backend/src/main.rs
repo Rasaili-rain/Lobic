@@ -1,5 +1,5 @@
-use std::fs;
 use std::path::Path;
+use std::{fs, io::Write};
 
 mod config;
 mod core;
@@ -8,15 +8,15 @@ mod mail;
 mod routes;
 mod schema;
 mod utils;
+use std::fs::File;
 
-use config::{COVER_IMG_STORAGE, server_ip, MUSIC_STORAGE, PLAYLIST_COVER_IMG_STORAGE, PORT, USER_PFP_STORAGE};
+use config::{server_ip, COVER_IMG_STORAGE, MUSIC_STORAGE, PLAYLIST_COVER_IMG_STORAGE, PORT, USER_PFP_STORAGE};
 use core::{app_state::AppState, migrations::run_migrations};
 use dotenv::dotenv;
 
 #[tokio::main]
 async fn main() {
 	create_storage_directories().expect("Failed to create storage directories");
-
 	dotenv().ok();
 	tracing_subscriber::fmt().pretty().init();
 
@@ -28,6 +28,8 @@ async fn main() {
 	let app = core::routes::configure_routes(app_state)
 		.layer(axum::middleware::from_fn(core::server::logger))
 		.layer(core::server::configure_cors());
+
+	write_ip_to_frontend(&server_ip(), &PORT).expect("Failed to load the ip to frontend ");
 
 	core::server::start_server(app, &server_ip(), &PORT).await;
 }
@@ -52,5 +54,14 @@ fn create_storage_directories() -> std::io::Result<()> {
 		}
 	}
 
+	Ok(())
+}
+
+fn write_ip_to_frontend(ip: &str, port: &str) -> std::io::Result<()> {
+	let const_ts_path = String::from("../frontend/src/const.ts");
+	let mut file = File::create(const_ts_path)?;
+	let const_ts =
+		format!("export const SERVER_IP = 'http://{ip}:{port}'; \nexport const WS_SERVER_IP = 'ws://{ip}:{port}/ws'; ");
+	file.write_all(const_ts.as_bytes())?;
 	Ok(())
 }

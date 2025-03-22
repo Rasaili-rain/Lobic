@@ -12,8 +12,8 @@ Lobic is an interactive music streaming application designed to transform how pe
 
 ## Tech Stack
 - **Frontend:** Node.js, React ,Tailwind CSS
-- **Backend:** Rust, Axum
-- **Database:** SQLite
+- **Backend:** Rust, Axum, Diesel
+- **Database:** SQLite 
 
 ## Setup Instructions
 1. Clone the repository:
@@ -46,8 +46,6 @@ Lobic is an interactive music streaming application designed to transform how pe
    ```bash
    cd ../frontend
    ```
-	>⚠️**Replace `server-ip`  in `frontend/src/const.ts` with your actual credentials (Your ip should appear on the terminal when you run the backend).**
-
 	Make sure Node.js is installed. Then run
 
 	```
