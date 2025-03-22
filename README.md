@@ -11,29 +11,29 @@ Lobic is an interactive music streaming application designed to transform how pe
 - **Signup with OTP Verification:** Secure signup process with OTP verification via email.
 
 ## Tech Stack
-- **Frontend:** Node.js, React
+- **Frontend:** Node.js, React ,Tailwind CSS
 - **Backend:** Rust, Axum
 - **Database:** SQLite
 
 ## Setup Instructions
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Rasaili-rain/Lobic.git
-   cd Lobic
+   git clone https://github.com/Rasaili-rain/lobic.git
+   cd lobic
    ```
 2. Backend Setup:
    ```bash
    cd backend
    ```
+      >⚠️**Replace `<otp-provider-email>` and `<otp-provider-email-app-pwd>` in .env with your actual credentials.**
+
    Ensure Rust ,Cargo and Sqlite are properly installed, then run:
    ```bash
    cargo run
    ```
 
-3. Load Music from your local storage:
+3. Load Music from your local storage `(in a separate terminal)`:
    ```bash
-    
-    #On a seperate terminal
     cd backend
     python -m venv venv
     source venv/bin/activate  # or venv\Scripts\activate on Windows
@@ -41,19 +41,14 @@ Lobic is an interactive music streaming application designed to transform how pe
     python gui_music_saver.py
 
    ```
-   >⚠️**Replace `<otp-provider-email>` and `<otp-provider-email-app,pwd>` in .env with your actual credentials.**
 
-   Ensure Rust ,Cargo and Sqlite are properly installed, then run:
-   ```bash
-   cargo run
-   ```
-
-4. Frontend Setup (in a separate terminal):
+4. Frontend Setup:
    ```bash
    cd ../frontend
    ```
-	>⚠️**Replace `server-ip`  in `frontend/src/const.ts` with your actual credentials.
-		Make sure Node.js is installed. Then run
+	>⚠️**Replace `server-ip`  in `frontend/src/const.ts` with your actual credentials (Your ip should appear on the terminal when you run the backend).**
+
+	Make sure Node.js is installed. Then run
 
 	```
 	npm i
