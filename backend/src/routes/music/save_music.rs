@@ -3,10 +3,8 @@ use crate::core::app_state::AppState;
 use crate::lobic_db::models::Music;
 use crate::schema::music::dsl::*;
 
-use axum::{extract::State, http::status::StatusCode, response::Response, Json};
 use diesel::prelude::*;
 use id3::{frame::PictureType, Tag, TagLike};
-use serde::{Deserialize, Serialize};
 use std::collections::hash_map::DefaultHasher;
 use std::fs;
 use std::hash::{Hash, Hasher};
@@ -15,63 +13,34 @@ use std::path::{Path, PathBuf};
 use uuid::Uuid;
 use walkdir::WalkDir;
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct MusicPath {
-	pub path: String,
-}
-
-pub async fn save_music(State(app_state): State<AppState>, Json(payload): Json<MusicPath>) -> Response<String> {
+pub fn load_folder_music(app_state: AppState, folder_path: String) {
 	let mut db_conn = match app_state.db_pool.get() {
 		Ok(conn) => conn,
-		Err(err) => {
-			return Response::builder()
-				.status(StatusCode::INTERNAL_SERVER_ERROR)
-				.body(format!("Failed to get DB from pool: {err}"))
-				.unwrap();
-		}
+		Err(_) => return,
 	};
 
 	// Convert Windows path to WSL path if needed
-	let path = normalize_path(&payload.path);
+	let path = normalize_path(&folder_path);
 	let path = Path::new(&path);
 
 	let mut saved_count = 0;
-	let mut errors = Vec::new();
 
 	if path.is_dir() {
 		for entry in WalkDir::new(path).into_iter().filter_map(|e| e.ok()) {
 			if is_music_file(entry.path()) {
 				match process_music_file(entry.path(), &mut db_conn) {
 					Ok(_) => saved_count += 1,
-					Err(e) => errors.push(format!("{}: {}", entry.path().display(), e)),
+					Err(_) => (),
 				}
 			}
 		}
 	} else if is_music_file(path) {
 		match process_music_file(path, &mut db_conn) {
 			Ok(_) => saved_count += 1,
-			Err(e) => errors.push(format!("{}: {}", path.display(), e)),
+			Err(_) => (),
 		}
 	}
-
-	let status = if errors.is_empty() {
-		StatusCode::OK
-	} else {
-		StatusCode::PARTIAL_CONTENT
-	};
-
-	Response::builder()
-		.status(status)
-		.body(format!(
-			"Processed {} files. {}",
-			saved_count,
-			if !errors.is_empty() {
-				format!("\nErrors: {}", errors.join("\n"))
-			} else {
-				String::new()
-			}
-		))
-		.unwrap()
+	println!("processed {saved_count} files");
 }
 
 fn normalize_path(path: &str) -> String {

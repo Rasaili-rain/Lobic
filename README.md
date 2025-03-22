@@ -21,30 +21,27 @@ Lobic is an interactive music streaming application designed to transform how pe
    git clone https://github.com/Rasaili-rain/lobic.git
    cd lobic
    ```
-2. Backend Setup:
+2. Run backend:
    ```bash
    cd backend
    ```
       >⚠️**Replace `<otp-provider-email>` and `<otp-provider-email-app-pwd>` in .env with your actual credentials.**
 
-   Ensure Rust ,Cargo and Sqlite are properly installed, then run:
+   Ensure Rust ,Cargo and Sqlite are properly installed.
+   To load some musics into the db and start the server:
    ```bash
-   cargo run
+   cargo run load 
    ```
 
-3. Load Music from your local storage `(in a separate terminal)`:
-   ```bash
-    cd backend
-    python -m venv venv
-    source venv/bin/activate  # or venv\Scripts\activate on Windows
-    pip install -r requirements.txt
-    python gui_music_saver.py
-
+   To only start the server:
+    ```bash
+   cargo run   
    ```
 
-4. Frontend Setup:
-   ```bash
-   cd ../frontend
+
+3. Run Frontend `(in a seperate terminal)`:
+   ```bash 
+	cd ../frontend
    ```
 	Make sure Node.js is installed. Then run
 

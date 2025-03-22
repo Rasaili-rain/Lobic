@@ -22,7 +22,6 @@ use crate::{
 			},
 			log_song_play::log_song_play,
 			recently_played::get_recently_played::get_recently_played,
-			save_music::save_music,
 			search_music::search_music,
 			send_music::send_music,
 			top_tracks::get_top_tracks::get_top_tracks,
@@ -58,8 +57,6 @@ use axum::{
 
 pub fn configure_routes(app_state: AppState) -> Router {
 	Router::new()
-		//load musics into storage
-		.route("/save_music", post(save_music))
 		//auth
 		.route("/", get(index))
 		.route("/get_user", get(get_user))
